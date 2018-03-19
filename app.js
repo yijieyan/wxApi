@@ -8,7 +8,7 @@ const logger = require('koa-logger')
 const auth = require('./middiware/auth')
 const index = require('./routes/index')
 const users = require('./routes/users')
-const address = require('./routes/address')
+const label = require('./routes/label')
 const dept = require('./routes/dept')
 
 // error handler
@@ -37,6 +37,6 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
-app.use(address.routes(), address.allowedMethods())
+app.use(label.routes(), label.allowedMethods())
 app.use(dept.routes(), dept.allowedMethods())
 module.exports = app
