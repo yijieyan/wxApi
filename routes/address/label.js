@@ -1,6 +1,6 @@
 const router = require('koa-router')()
-let {requestApi} = require('../libs/ajax')
-let {prefix} = require('../config')
+let {requestApi} = require('../../libs/ajax')
+let {prefix} = require('../../config')
 router.prefix('/label')
 
 /**

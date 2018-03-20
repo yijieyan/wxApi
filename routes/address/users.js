@@ -1,6 +1,6 @@
 const router = require('koa-router')()
-let {requestApi} = require('../libs/ajax')
-let {prefix} = require('../config')
+let {requestApi} = require('../../libs/ajax')
+let {prefix} = require('../../config')
 router.prefix('/users')
 // todo 通讯录管理   打开企业微信的编辑通讯录的权限才可以调通下面的接口
 
@@ -134,7 +134,7 @@ router.post('/batchdelete', async (ctx, next) => {
         },
         json: true
       };
-  
+
       let res = await requestApi(options);
       if (res.errcode === 0) {
         ctx.success('batchdelete successful!');
@@ -261,4 +261,28 @@ router.post('/convertToUserid', async (ctx, next) => {
   }
 })
 
+/**
+ * 邀请成员
+ * @type {Array}
+ */
+router.post('/invite', async (ctx, next) => {
+  let {user=[], party=[], tag=[]} = ctx.request.body;
+  let options = {
+    uri: `${prefix}batch/invite?access_token=${ctx.userToken}`,
+    method: 'POST',
+    body: {
+      user,
+      party,
+      tag
+    },
+    json: true
+  };
+
+  let res = await requestApi(options);
+  if (res.errcode === 0) {
+    ctx.success(`invite successful!`);
+  }else {
+    ctx.success('', res.errcode, res.errmsg);
+  }
+})
 module.exports = router
