@@ -5,7 +5,8 @@ let sha1 = require('sha1')
 
 let getRawBody = require('raw-body')
 let parser = require('xml2json')
-let {formatMessage, analysis} = require('../../libs/util')
+let {formatMessage, wechatDecrypt, wechatEncrypt} = require('../../libs/util')
+let {reply} = require('../../libs/reply')
 router.prefix('/recv')
 
 router.get('/', async (ctx, next) => {
@@ -14,7 +15,7 @@ router.get('/', async (ctx, next) => {
   let str = [test1Token,timestamp,nonce,msg_encrypt].sort().join('')
   let dev_msg_signature=sha1(str)
   if (dev_msg_signature === msg_signature) {
-      let result = analysis(test1Token,test1AESKey, corpid)
+      let result = wechatDecrypt(test1Token,test1AESKey, corpid, msg_encrypt)
       ctx.body = result.message
   }else {
     ctx.success('',-1,'verification failure')
@@ -22,21 +23,29 @@ router.get('/', async (ctx, next) => {
 })
 
 router.post('/', async (ctx, next) => {
-  let query = ctx.query
-  let body = ctx.request.body
-  console.log(query)
-  console.log('------------')
-  console.log(body)
   let xml = await getRawBody(ctx.req,{
         length: ctx.headers["content-length"],
         limit: '1mb',
         encoding: 'utf-8'
     });
     let data = formatMessage(JSON.parse(parser.toJson(xml)).xml)
-    console.log(data)
-    let msg
-    msg_signature(query.msg_signature, query.timestamp,query.nonce,body, msg)
-    console.log(msg)
+    let result = wechatDecrypt(test1Token,test1AESKey, corpid, data.Encrypt)
+    let content = formatMessage(JSON.parse(parser.toJson(result.message)).xml)
+    let res = await reply(content)
+
+    let msg = wechatEncrypt(test1Token,test1AESKey, corpid, res)
+    let timestamp = parseInt(Date.now()/1000)
+    let nonce = Math.random().toString().slice(2,12)
+    let str = [test1Token,timestamp,nonce,msg].sort().join('')
+    let new_msg_signature=sha1(str)
+    let ret = `<xml>
+                <Encrypt><![CDATA[${msg}]]></Encrypt>
+                <MsgSignature><![CDATA[${new_msg_signature}]]></MsgSignature>
+                <TimeStamp>${timestamp}</TimeStamp>
+                <Nonce><![CDATA[${nonce}]]></Nonce>
+              </xml>`
+    ctx.type = 'application/xml'
+    ctx.body = ret
 
 })
 

@@ -11,7 +11,7 @@ router.prefix('/menu')
 router.post('/create', async (ctx, next) => {
   let obj = ctx.request.body;
   let options = {
-    uri: `${prefix}menu/create?access_token=${test1Token}&agentid=${test1Agentid}`,
+    uri: `${prefix}menu/create?access_token=${ctx.test1Token}&agentid=${test1Agentid}`,
     method: 'POST',
     body: obj,
     json: true

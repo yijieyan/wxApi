@@ -37,12 +37,44 @@ function formatMessage(result) {
     return message;
 };
 
-function analysis (token, key, id) {
+function wechatDecrypt (token, key, id, msg_encrypt) {
   let cryptor = new WXBizMsgCrypt( token,key, id);
   let result = cryptor.decrypt(msg_encrypt)
   return result;
 }
+
+
+function wechatEncrypt (token, key, id, msg) {
+  let cryptor = new WXBizMsgCrypt( token,key, id);
+  let result = cryptor.encrypt(msg)
+  return result;
+}
+
+
+function formatData (content, message) {
+  let ToUserName = message.ToUserName
+  let FromUserName = message.FromUserName
+  let timestamp = parseInt(Date.now()/1000)
+  let type = 'text'
+  let AgentID = message.AgentID
+  let MsgId = message.MsgId
+  let info = {}
+  if (Array.isArray(content)) {
+    type = 'news'
+  }
+
+  info.fromUser = ToUserName
+  info.toUser = FromUserName
+  info.MsgType = content.type ? content.type : type
+  info.timestamp = timestamp
+  info.content = content
+  info.MsgId = MsgId
+  info.AgentID = AgentID
+  return info
+}
 module.exports = {
   formatMessage,
-  analysis
+  wechatDecrypt,
+  wechatEncrypt,
+  formatData
 }
