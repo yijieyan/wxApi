@@ -1,9 +1,1 @@
-<xml>
-      <ToUserName><![CDATA[ww520d48dacfe468b9]]></ToUserName>
-      <FromUserName><![CDATA[YanYiJie]]></FromUserName>
-      <CreateTime>1521623105</CreateTime>
-      <MsgType><![CDATA[text]]></MsgType>
-
-        <Content><![CDATA[天下第一]]></Content>
-
-    </xml>
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww520d48dacfe468b9&redirect_uri=http://yijie123.free.ngrok.cc&response_type=code&scope=snsapi_base&agentid=1000002&state=asd#wechat_redirect

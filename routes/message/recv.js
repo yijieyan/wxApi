@@ -7,7 +7,7 @@ let getRawBody = require('raw-body')
 let parser = require('xml2json')
 let {formatMessage, wechatDecrypt, wechatEncrypt} = require('../../libs/util')
 let {reply} = require('../../libs/reply')
-router.prefix('/recv')
+// router.prefix('/recv')
 
 router.get('/', async (ctx, next) => {
   let {msg_signature, timestamp, nonce, echostr} = ctx.query;

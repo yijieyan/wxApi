@@ -1,6 +1,6 @@
 module.exports = {
   port: 3000,
-  dbUrl: '',
+  dbUrl: 'mongodb://localhost:27017/wxApi',
   prefix: 'https://qyapi.weixin.qq.com/cgi-bin/',
   corpid: '',
   corpsecret: [
@@ -20,7 +20,7 @@ module.exports = {
   clockAgentid: '',
   approvalAgentid: '',
   test1Agentid:'',
-  test1Token: '',
-  test1AESKey: ''
-
+  test1Token: 'test1',
+  test1AESKey: '',
+  domain: 'http://yijie123.free.ngrok.cc'
 }

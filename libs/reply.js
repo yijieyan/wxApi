@@ -1,6 +1,7 @@
-let heredoc = require('heredoc')
+ let heredoc = require('heredoc')
 let path = require('path')
 let ejs = require('ejs')
+let {domain, test1Agentid, corpid} = require('../config')
 let {formatData} = require('./util')
 
 
@@ -13,8 +14,44 @@ let reply = async (message) => {
         let content = '天下第一'
         let info = await formatData(content, message)
         res = compiled(info)
-      }else {
-        let content = '你说的什么,我根本机会不明白,--.'
+      }else if (message.Content === '2') {
+        let content = {
+          media_id: '3V_A7H4pSu73ZQmYgGQieSckQT_kNWkT89Oge2Rgw-aPao2eAbFHxhuaiD_nRRpBV',
+          type: 'image'
+        };
+        let info = await formatData(content, message)
+        res = compiled(info)
+      }else if (message.Content === '3') {
+        let content = {
+          media_id: '3jQa1JHms-Rx9Q4cPUw201pTq1M_-iqa1MkXkBmJat0y-lmfEiUdRdDXoLeuF7DEa',
+          type: 'video',
+          title: '视频',
+          description: '小提琴演奏'
+        }
+        let info = await formatData(content, message)
+        res = compiled(info)
+      }else if (message.Content === '4') {
+        let content = [
+          {
+            title: 'nodejs',
+            description: 'Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境,Node.js 使用了一个事件驱动',
+            picurl: 'http://g.hiphotos.baidu.com/image/h%3D300/sign=c5c54b2aad8b87d64f42ad1f37092860/eaf81a4c510fd9f9a1f3ac72292dd42a2934a4c1.jpg',
+            url:'http://nodejs.cn/'
+          }
+        ]
+
+        let info = await formatData(content, message)
+        res = compiled(info)
+      }else if (message.Content === '5') {
+        let redirect_uri = encodeURIComponent(domain)
+        let uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${corpid}&redirect_uri=${redirect_uri}/aaa&response_type=code&scope=snsapi_privateinfo&agentid=${test1Agentid}&state=asd#wechat_redirect`
+        let content = `<a href="${uri}">点击我</a>`
+        let info = await formatData(content, message)
+        res = compiled(info)
+      }
+
+      else {
+        let content = '你说的什么,我听不懂,回复:1，你可以体验文字回复,回复:2,体验图片回复,回复:3，体验视频回复,回复:4，体验图文回复。'
         let info = await formatData(content, message)
         res = compiled(info)
       }
@@ -82,7 +119,7 @@ let tpl = heredoc(() => {/*
       <CreateTime><%=timestamp%></CreateTime>
       <MsgType><![CDATA[<%=MsgType%>]]></MsgType>
       <% if (MsgType === 'text') {%>
-        <Content><![CDATA[<%=content%>]]></Content>
+        <Content><![CDATA[<%-content%>]]></Content>
       <%} else if (MsgType === 'image') {%>
           <Image>
             <MediaId><![CDATA[<%=content.media_id%>]]></MediaId>
@@ -109,10 +146,6 @@ let tpl = heredoc(() => {/*
     </xml>
 */
 })
-
-
-
-
 
 let compiled = ejs.compile(tpl)
 

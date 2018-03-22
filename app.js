@@ -15,7 +15,8 @@ const clock = require('./routes/application/clock')
 const menu = require('./routes/application/menu')
 const send = require('./routes/message/send')
 const recv = require('./routes/message/recv')
-
+const upload = require('./routes/application/resource')
+require('./libs/db')
 // error handler
 onerror(app)
 
@@ -49,4 +50,5 @@ app.use(clock.routes(), clock.allowedMethods())
 app.use(menu.routes(), menu.allowedMethods())
 app.use(send.routes(), send.allowedMethods())
 app.use(recv.routes(), recv.allowedMethods())
+app.use(upload.routes(), upload.allowedMethods())
 module.exports = app

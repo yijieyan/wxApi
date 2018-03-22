@@ -48,7 +48,10 @@ router.get('/', async (ctx, next) => {
 })
 
 
-
+/**
+ * 删除菜单
+ * @type {Object}
+ */
 router.post('/delete', async (ctx, next) => {
     let {agentid} = ctx.request.body
     let options = {
